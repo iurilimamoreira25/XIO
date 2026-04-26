@@ -9,7 +9,7 @@ function Nav() {
           <a href="#fundadores">Fundadores</a>
           <a href="#preco">Preço</a>
           <a href="#faq">FAQ</a>
-          <a href="#cta" className="btn btn-primary">Começar</a>
+          <a href="https://pay.kiwify.com.br/DOKxCPm" target="_blank" rel="noopener" className="btn btn-primary">Começar</a>
         </div>
       </div>
     </nav>
@@ -29,7 +29,7 @@ function Hero() {
         A gente te ensina a construir e vender — em semanas, não anos.
       </p>
       <div className="hero-cta">
-        <a href="#cta" className="btn btn-primary btn-lg">Quero começar</a>
+        <a href="https://pay.kiwify.com.br/DOKxCPm" target="_blank" rel="noopener" className="btn btn-primary btn-lg">Quero começar</a>
         <a href="#metodo" className="btn btn-ghost btn-lg">Como funciona</a>
       </div>
       <div className="hero-meta">

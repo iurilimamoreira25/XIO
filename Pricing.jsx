@@ -29,7 +29,7 @@ function Pricing() {
             <div className="pricing-bullet"><Check/>Atualizações vitalícias</div>
             <div className="pricing-bullet"><Check/>Garantia de 7 dias</div>
           </div>
-          <a href="#" className="pricing-cta">Garantir minha vaga</a>
+          <a href="https://pay.kiwify.com.br/DOKxCPm" target="_blank" rel="noopener" className="pricing-cta">Garantir minha vaga</a>
           <div className="pricing-fine">Pagamento 100% seguro · Cartão / Pix / Boleto</div>
         </div>
       </div>
@@ -75,7 +75,7 @@ function FinalCTA() {
     <section className="final-cta container" id="cta">
       <h2>Bora?<br/><span style={{fontWeight: 300, color: 'var(--muted-2)'}}>Clica aí.</span></h2>
       <p>Se você chegou até aqui é porque tá interessado. Faz o cadastro e a gente se vê do outro lado.</p>
-      <a href="#" className="btn btn-primary btn-lg">Quero entrar pra XIO</a>
+      <a href="https://pay.kiwify.com.br/DOKxCPm" target="_blank" rel="noopener" className="btn btn-primary btn-lg">Quero entrar pra XIO</a>
     </section>
   );
 }
