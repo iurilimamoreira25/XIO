@@ -4,38 +4,524 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>XIO — Programa do zero. Com IA.</title>
-  <link rel="stylesheet" href="styles.css"/>
-  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { background: #000; color: #fff; font-family: ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+:root { --line: #1a1a1a; --line-2: #2a2a2a; --muted: #888; --muted-2: #b8b8b8; --bg: #000; --fg: #fff; --container: 1180px; }
+.container { max-width: var(--container); margin: 0 auto; padding: 0 28px; }
+.section { padding: 120px 0; border-top: 1px solid var(--line); }
+.eyebrow { font-size: 12px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+.muted { color: var(--muted-2); }
+.nav { position: sticky; top: 0; z-index: 50; background: rgba(0,0,0,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--line); }
+.nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 18px 28px; max-width: var(--container); margin: 0 auto; }
+.nav-logo { font-weight: 800; letter-spacing: -0.02em; font-size: 20px; }
+.nav-logo img { height: 40px; width: auto; }
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-links a { font-size: 14px; color: var(--muted-2); transition: color .15s; }
+.nav-links a:hover { color: var(--fg); }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 20px; border-radius: 999px; font-size: 14px; font-weight: 600; transition: all .15s ease; }
+.btn-primary { background: #fff; color: #000; }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255,255,255,0.12); }
+.btn-ghost { color: var(--muted-2); border: 1px solid var(--line-2); }
+.btn-ghost:hover { color: #fff; border-color: #fff; }
+.btn-lg { padding: 16px 28px; font-size: 15px; }
+.hero { padding: 120px 0 100px; text-align: center; position: relative; overflow: hidden; }
+.hero h1 { font-size: clamp(48px, 8vw, 104px); line-height: 0.98; letter-spacing: -0.04em; font-weight: 800; max-width: 1000px; margin: 24px auto 28px; }
+.hero h1 .thin { font-weight: 300; color: var(--muted-2); }
+.hero-sub { font-size: clamp(17px, 1.4vw, 20px); color: var(--muted-2); max-width: 600px; margin: 0 auto 40px; line-height: 1.5; }
+.hero-cta { display: inline-flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+.hero-meta { margin-top: 60px; display: flex; gap: 40px; justify-content: center; align-items: center; flex-wrap: wrap; color: var(--muted); font-size: 13px; }
+.hero-meta-item { display: flex; align-items: center; gap: 8px; }
+.hero-meta-item strong { color: #fff; font-weight: 600; }
+.hero-meta-divider { width: 1px; height: 12px; background: var(--line-2); }
+.stat-row { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.stat-cell { padding: 56px 32px; border-right: 1px solid var(--line); }
+.stat-cell:last-child { border-right: none; }
+.stat-num { font-size: 56px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; margin-bottom: 8px; }
+.stat-label { font-size: 13px; color: var(--muted); }
+.features-head { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-bottom: 80px; align-items: end; }
+.features-head h2 { font-size: clamp(36px, 4.5vw, 56px); line-height: 1.05; letter-spacing: -0.03em; font-weight: 800; }
+.features-head .muted { font-size: 16px; line-height: 1.6; max-width: 480px; }
+.features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+.feature { padding: 40px 32px 48px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); position: relative; min-height: 220px; display: flex; flex-direction: column; }
+.feature-num { font-size: 12px; color: var(--muted); margin-bottom: 24px; font-variant-numeric: tabular-nums; }
+.feature h3 { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 10px; }
+.feature p { font-size: 14px; color: var(--muted-2); line-height: 1.55; }
+.steps { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+.steps-left h2 { font-size: clamp(40px, 5vw, 64px); line-height: 1; letter-spacing: -0.04em; font-weight: 800; }
+.steps-left h2 .thin { font-weight: 300; color: var(--muted-2); }
+.steps-left p { color: var(--muted-2); margin-top: 24px; font-size: 16px; line-height: 1.6; }
+.steps-list { display: flex; flex-direction: column; }
+.step { padding: 28px 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 48px 1fr; gap: 20px; align-items: start; }
+.step:last-child { border-bottom: none; }
+.step-num { font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; padding-top: 2px; }
+.step-body h4 { font-size: 18px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.01em; }
+.step-body p { font-size: 14px; color: var(--muted-2); line-height: 1.55; }
+.tweets-head { text-align: center; margin-bottom: 64px; }
+.tweets-head h2 { font-size: clamp(36px, 4.5vw, 56px); line-height: 1.05; letter-spacing: -0.03em; font-weight: 800; max-width: 720px; margin: 12px auto 0; }
+.tweets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.tweet { border: 1px solid var(--line); border-radius: 16px; padding: 24px; background: #0a0a0a; transition: border-color .2s; display: flex; flex-direction: column; gap: 14px; }
+.tweet:hover { border-color: var(--line-2); }
+.tweet-head { display: flex; align-items: center; gap: 12px; }
+.tweet-avatar { width: 40px; height: 40px; border-radius: 50%; background: #1a1a1a; flex-shrink: 0; display: grid; place-items: center; font-weight: 700; font-size: 15px; color: #fff; }
+.tweet-name { font-size: 14px; font-weight: 600; line-height: 1.2; }
+.tweet-handle { font-size: 12px; color: var(--muted); }
+.tweet-body { font-size: 14px; line-height: 1.55; color: #ddd; }
+.tweet-body b { color: #fff; }
+.founders { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+.founders-photos { display: flex; gap: 16px; }
+.founder-photo { aspect-ratio: 4/5; flex: 1; border-radius: 12px; overflow: hidden; background: #0a0a0a; filter: grayscale(100%) contrast(1.05); }
+.founder-photo img { width: 100%; height: 100%; object-fit: cover; }
+.founders-text h2 { font-size: clamp(36px, 4.5vw, 52px); line-height: 1.05; letter-spacing: -0.03em; font-weight: 800; margin-bottom: 24px; }
+.founders-text p { color: var(--muted-2); font-size: 16px; line-height: 1.65; margin-bottom: 16px; }
+.founders-text p b { color: #fff; font-weight: 600; }
+.founders-meta { display: flex; gap: 24px; margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--line); }
+.founder-tag { font-size: 13px; }
+.founder-tag-name { font-weight: 700; color: #fff; }
+.founder-tag-role { color: var(--muted); }
+.pricing-wrap { display: grid; grid-template-columns: 1fr 1.2fr; gap: 60px; align-items: center; }
+.pricing-left h2 { font-size: clamp(40px, 5vw, 60px); line-height: 1; letter-spacing: -0.04em; font-weight: 800; margin-bottom: 24px; }
+.pricing-left h2 .thin { font-weight: 300; color: var(--muted-2); }
+.pricing-left p { color: var(--muted-2); font-size: 16px; line-height: 1.6; }
+.pricing-card { border: 1px solid var(--line-2); border-radius: 24px; padding: 48px 44px; background: #0a0a0a; }
+.pricing-eyebrow { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+.pricing-was { color: var(--muted); font-size: 18px; text-decoration: line-through; }
+.pricing-now { display: flex; align-items: baseline; gap: 6px; margin: 8px 0 24px; }
+.pricing-now .currency { font-size: 28px; color: var(--muted-2); font-weight: 600; }
+.pricing-now .amount { font-size: 88px; font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
+.pricing-tagline { font-size: 14px; color: var(--muted-2); margin-bottom: 28px; }
+.pricing-divider { height: 1px; background: var(--line); margin: 24px 0; }
+.pricing-bullets { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+.pricing-bullet { display: flex; align-items: center; gap: 12px; font-size: 14px; }
+.pricing-bullet .check { width: 16px; height: 16px; flex-shrink: 0; }
+.pricing-cta { width: 100%; display: flex; justify-content: center; padding: 18px; border-radius: 999px; background: #fff; color: #000; font-weight: 700; font-size: 15px; transition: all .15s; cursor: pointer; }
+.pricing-cta:hover { transform: translateY(-1px); box-shadow: 0 12px 32px rgba(255,255,255,0.18); }
+.pricing-fine { font-size: 12px; color: var(--muted); text-align: center; margin-top: 12px; }
+.faq-wrap { max-width: 760px; margin: 0 auto; }
+.faq-head { text-align: center; margin-bottom: 48px; }
+.faq-head h2 { font-size: clamp(36px, 4.5vw, 52px); line-height: 1.05; letter-spacing: -0.03em; font-weight: 800; }
+.faq-item { border-bottom: 1px solid var(--line); }
+.faq-q { width: 100%; text-align: left; padding: 24px 0; display: flex; justify-content: space-between; align-items: center; gap: 24px; font-size: 17px; font-weight: 600; cursor: pointer; }
+.faq-q:hover { color: var(--muted-2); }
+.faq-icon { width: 18px; height: 18px; flex-shrink: 0; transition: transform .2s; }
+.faq-item.open .faq-icon { transform: rotate(45deg); }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height .25s ease, padding .25s; color: var(--muted-2); font-size: 15px; line-height: 1.6; }
+.faq-item.open .faq-a { max-height: 400px; padding: 0 0 24px 0; }
+.final-cta { padding: 140px 0; text-align: center; border-top: 1px solid var(--line); }
+.final-cta h2 { font-size: clamp(48px, 8vw, 96px); line-height: 0.98; letter-spacing: -0.04em; font-weight: 800; margin-bottom: 20px; }
+.final-cta p { color: var(--muted-2); font-size: 18px; margin-bottom: 36px; max-width: 540px; margin-left: auto; margin-right: auto; line-height: 1.5; }
+.footer { padding: 60px 0 40px; border-top: 1px solid var(--line); }
+.footer-inner { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 60px; }
+.footer-brand .logo { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 12px; }
+.footer-brand p { color: var(--muted); font-size: 13px; line-height: 1.5; max-width: 280px; }
+.footer-col h5 { font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); margin-bottom: 16px; font-weight: 600; }
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-col a { font-size: 14px; color: var(--muted-2); }
+.footer-col a:hover { color: #fff; }
+.footer-bottom { margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
+@media (max-width: 900px) {
+  .stat-row, .features-grid, .tweets, .founders, .pricing-wrap, .footer-inner { grid-template-columns: 1fr; }
+  .features-head, .steps { grid-template-columns: 1fr; gap: 32px; }
+  .stat-cell { border-right: none; border-bottom: 1px solid var(--line); }
+  .stat-cell:last-child { border-bottom: none; }
+  .feature { border-right: none; }
+  .nav-links a:not(:last-child) { display: none; }
+  .section { padding: 80px 0; }
+  .hero { padding: 80px 0 64px; }
+  .hero-meta-divider { display: none; }
+  .founders-photos { max-width: 320px; }
+}
+  </style>
 </head>
 <body>
-  <div id="root"></div>
 
-  <script type="text/babel" src="HeroNav.jsx"></script>
-  <script type="text/babel" src="Features.jsx"></script>
-  <script type="text/babel" src="Social.jsx"></script>
-  <script type="text/babel" src="Pricing.jsx"></script>
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <img src="logo.png.jpeg" alt="XIO Technologies"/>
+    </div>
+    <div class="nav-links">
+      <a href="#metodo">Método</a>
+      <a href="#fundadores">Fundadores</a>
+      <a href="#preco">Preço</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://pay.kiwify.com.br/DOKxCPm" target="_blank" rel="noopener" class="btn btn-primary">Começar</a>
+    </div>
+  </div>
+</nav>
 
-  <script type="text/babel">
-    function App() {
-      return (
-        <>
-          <Nav/>
-          <Hero/>
-          <StatRow/>
-          <Features/>
-          <Steps/>
-          <TweetWall/>
-          <Founders/>
-          <Pricing/>
-          <FAQ/>
-          <FinalCTA/>
-          <SiteFooter/>
-        </>
-      );
-    }
-    ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
-  </script>
+<!-- HERO -->
+<section class="hero container">
+  <div class="eyebrow">XIO · Programar com IA</div>
+  <h1>
+    Programa do zero.<br/>
+    <span class="thin">Com inteligência artificial.</span>
+  </h1>
+  <p class="hero-sub">
+    Sem faculdade. Sem rodeios. Sem precisar saber código antes.
+    A gente te ensina a construir e vender — em semanas, não anos.
+  </p>
+  <div class="hero-cta">
+    <a href="https://pay.kiwify.com.br/DOKxCPm" target="_blank" rel="noopener" class="btn btn-primary btn-lg">Quero começar</a>
+    <a href="#metodo" class="btn btn-ghost btn-lg">Como funciona</a>
+  </div>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><strong>+200</strong> alunos ativos</div>
+    <div class="hero-meta-divider"></div>
+    <div class="hero-meta-item"><strong>2</strong> fundadores · paraenses</div>
+    <div class="hero-meta-divider"></div>
+    <div class="hero-meta-item">100% online</div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="container">
+  <div class="stat-row">
+    <div class="stat-cell">
+      <div class="stat-num">21</div>
+      <div class="stat-label">anos — idade dos fundadores quando criaram a XIO</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num">0</div>
+      <div class="stat-label">faculdade necessária pra começar</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num">~6</div>
+      <div class="stat-label">semanas até seu primeiro projeto vendido</div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="section container" id="metodo">
+  <div class="features-head">
+    <h2>Tudo que você precisa.<br/>Nada que você não precisa.</h2>
+    <p class="muted">
+      A XIO foi feita pra quem nunca programou. Sem termos técnicos,
+      sem rodeios. Você abre o computador, segue o passo a passo,
+      e sai construindo coisas reais.
+    </p>
+  </div>
+  <div class="features-grid">
+    <div class="feature">
+      <div class="feature-num">01</div>
+      <h3>Aulas práticas</h3>
+      <p>Aulas curtas, direto ao ponto. Você abre o VS Code junto comigo e a gente constrói lado a lado.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-num">02</div>
+      <h3>Projetos reais</h3>
+      <p>Nada de "olá mundo". Você sai com landing pages, sites de cliente e apps que dá pra cobrar.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-num">03</div>
+      <h3>Claude + VS Code</h3>
+      <p>As ferramentas que a gente usa todo dia. Setup zero. Funciona no Mac, no Windows e no Linux.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-num">04</div>
+      <h3>Comunidade fechada</h3>
+      <p>Discord com os outros alunos e a gente. Tira dúvida, mostra projeto, fecha cliente junto.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-num">05</div>
+      <h3>Como cobrar</h3>
+      <p>Aula sobre orçamento, contrato, pagamento. Como achar primeiro cliente sem ter portfolio.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-num">06</div>
+      <h3>Acesso vitalício</h3>
+      <p>Comprou uma vez, é seu. Atualizações grátis. Sem mensalidade depois.</p>
+    </div>
+  </div>
+</section>
+
+<!-- STEPS -->
+<section class="section container">
+  <div class="steps">
+    <div class="steps-left">
+      <h2>Em 3 etapas.<br/><span class="thin">Sem mistério.</span></h2>
+      <p>
+        A gente foi do zero ao primeiro projeto vendido em semanas.
+        Você vai pelo mesmo caminho — só que com a gente puxando você.
+      </p>
+    </div>
+    <div class="steps-list">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-body">
+          <h4>Você instala as ferramentas</h4>
+          <p>VS Code + Claude. Em 15 minutos você tá com tudo rodando, mesmo nunca tendo programado.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-body">
+          <h4>Constrói o primeiro projeto</h4>
+          <p>Junto comigo, na primeira aula. Site, app, landing — você escolhe. Sai funcionando de verdade.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-body">
+          <h4>Vende</h4>
+          <p>A gente te mostra como cobrar, fechar primeiro cliente e tirar isso do papel pra entrar dinheiro.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TWEETS -->
+<section class="section container">
+  <div class="tweets-head">
+    <div class="eyebrow">Quem já passou</div>
+    <h2>Histórias reais de quem fez o curso.</h2>
+  </div>
+  <div class="tweets">
+    <div class="tweet">
+      <div class="tweet-head">
+        <div class="tweet-avatar">L</div>
+        <div>
+          <div class="tweet-name">Lucas P.</div>
+          <div class="tweet-handle">@lucasprgr</div>
+        </div>
+      </div>
+      <div class="tweet-body">Comecei do zero, sem nunca ter visto código. Em <b>3 semanas</b> tava entregando primeiro freela. A XIO me destravou.</div>
+    </div>
+    <div class="tweet">
+      <div class="tweet-head">
+        <div class="tweet-avatar">M</div>
+        <div>
+          <div class="tweet-name">Mariana S.</div>
+          <div class="tweet-handle">@maris.dev</div>
+        </div>
+      </div>
+      <div class="tweet-body">Tava perdida tentando aprender programação por conta. Aqui é direto, sem rodeio. <b>Cobrei meu primeiro cliente</b> mês passado.</div>
+    </div>
+    <div class="tweet">
+      <div class="tweet-head">
+        <div class="tweet-avatar">R</div>
+        <div>
+          <div class="tweet-name">Ricardo M.</div>
+          <div class="tweet-handle">@ricamds</div>
+        </div>
+      </div>
+      <div class="tweet-body">Cara, achei que IA era só hype. Aí entrei na XIO e vi que dá pra <b>construir coisa séria</b>. Mudou minha cabeça.</div>
+    </div>
+    <div class="tweet">
+      <div class="tweet-head">
+        <div class="tweet-avatar">J</div>
+        <div>
+          <div class="tweet-name">Julia T.</div>
+          <div class="tweet-handle">@juliacode</div>
+        </div>
+      </div>
+      <div class="tweet-body">Saí da odonto pra programação no fim do ano passado. <b>Comunidade da XIO me carregou</b>. Hoje vivo só de projeto.</div>
+    </div>
+    <div class="tweet">
+      <div class="tweet-head">
+        <div class="tweet-avatar">P</div>
+        <div>
+          <div class="tweet-name">Pedro H.</div>
+          <div class="tweet-handle">@phenrique</div>
+        </div>
+      </div>
+      <div class="tweet-body">O método é simples: faz junto. Não tem aula chata, não tem teoria. <b>Primeiro projeto na primeira semana.</b></div>
+    </div>
+    <div class="tweet">
+      <div class="tweet-head">
+        <div class="tweet-avatar">C</div>
+        <div>
+          <div class="tweet-name">Camila R.</div>
+          <div class="tweet-handle">@camirochaa</div>
+        </div>
+      </div>
+      <div class="tweet-body">Tinha medo de IA tirar emprego. Agora uso ela como funcionária. <b>Triplicou minha velocidade.</b></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDERS -->
+<section class="section container" id="fundadores">
+  <div class="founders">
+    <div class="founders-photos">
+      <div class="founder-photo" style="background:#111;display:flex;align-items:center;justify-content:center;font-size:64px;">👤</div>
+      <div class="founder-photo" style="background:#111;display:flex;align-items:center;justify-content:center;font-size:64px;">👤</div>
+    </div>
+    <div class="founders-text">
+      <div class="eyebrow" style="margin-bottom:16px">Os fundadores</div>
+      <h2>Iuri &amp; Octavio.<br/>Paraenses, 21.</h2>
+      <p><b>Octavio</b> mora no Canadá e me ensinou a programar usando IA. Eu, <b>Iuri</b>, vinha da odontologia — nunca tinha tocado em código.</p>
+      <p>Foi muito mais fácil do que eu imaginava. Em pouco tempo já tava criando coisas que valiam dinheiro de verdade. A XIO é isso: a gente te ensina o caminho que a gente fez.</p>
+      <div class="founders-meta">
+        <div class="founder-tag">
+          <div class="founder-tag-name">Iuri Moreira</div>
+          <div class="founder-tag-role">Brasil · ex-odontologia</div>
+        </div>
+        <div class="founder-tag">
+          <div class="founder-tag-name">Octavio</div>
+          <div class="founder-tag-role">Canadá · mentor</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section container" id="preco">
+  <div class="pricing-wrap">
+    <div class="pricing-left">
+      <div class="eyebrow" style="margin-bottom:16px">Investimento</div>
+      <h2>Menos do que <span class="thin">você imagina.</span></h2>
+      <p>Sem mensalidade. Sem surpresa. Pagou uma vez, é seu pra sempre. Atualizações inclusas.</p>
+    </div>
+    <div class="pricing-card">
+      <div class="pricing-eyebrow">Plano único · Acesso vitalício</div>
+      <div class="pricing-was">de R$ 89,90</div>
+      <div class="pricing-now">
+        <span class="currency">R$</span>
+        <span class="amount">49,90</span>
+      </div>
+      <div class="pricing-tagline">à vista · Pix, cartão ou boleto</div>
+      <div class="pricing-divider"></div>
+      <div class="pricing-bullets">
+        <div class="pricing-bullet">
+          <svg class="check" viewBox="0 0 16 16" fill="none"><path d="M3 8.5L6.5 12L13 4.5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Curso completo + projetos práticos
+        </div>
+        <div class="pricing-bullet">
+          <svg class="check" viewBox="0 0 16 16" fill="none"><path d="M3 8.5L6.5 12L13 4.5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Comunidade fechada no Discord
+        </div>
+        <div class="pricing-bullet">
+          <svg class="check" viewBox="0 0 16 16" fill="none"><path d="M3 8.5L6.5 12L13 4.5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Aula de como cobrar e achar cliente
+        </div>
+        <div class="pricing-bullet">
+          <svg class="check" viewBox="0 0 16 16" fill="none"><path d="M3 8.5L6.5 12L13 4.5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Atualizações vitalícias
+        </div>
+        <div class="pricing-bullet">
+          <svg class="check" viewBox="0 0 16 16" fill="none"><path d="M3 8.5L6.5 12L13 4.5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Garantia de 7 dias
+        </div>
+      </div>
+      <a href="https://pay.kiwify.com.br/DOKxCPm" target="_blank" rel="noopener" class="pricing-cta">Garantir minha vaga</a>
+      <div class="pricing-fine">Pagamento 100% seguro · Cartão / Pix / Boleto</div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section container" id="faq">
+  <div class="faq-wrap">
+    <div class="faq-head">
+      <h2>Perguntas que a gente sempre escuta.</h2>
+    </div>
+    <div class="faq-item open">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Preciso saber programar antes?
+        <svg class="faq-icon" viewBox="0 0 18 18" fill="none"><path d="M9 4V14M4 9H14" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+      <div class="faq-a">Não. A XIO foi feita pra quem nunca abriu um editor de código. A gente começa do zero junto.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Quanto tempo leva pra ver resultado?
+        <svg class="faq-icon" viewBox="0 0 18 18" fill="none"><path d="M9 4V14M4 9H14" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+      <div class="faq-a">Depende da sua dedicação. A maioria dos alunos termina o primeiro projeto em 1-2 semanas e fecha o primeiro freela em 4-6 semanas.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Funciona em qualquer computador?
+        <svg class="faq-icon" viewBox="0 0 18 18" fill="none"><path d="M9 4V14M4 9H14" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+      <div class="faq-a">Sim. Mac, Windows ou Linux. As ferramentas (VS Code + Claude) são gratuitas e leves.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Vou conseguir mesmo cobrar por isso?
+        <svg class="faq-icon" viewBox="0 0 18 18" fill="none"><path d="M9 4V14M4 9H14" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+      <div class="faq-a">A gente tem aula específica sobre orçamento, contrato e como achar primeiro cliente. E a comunidade ajuda muito nessa parte.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        E se eu não gostar?
+        <svg class="faq-icon" viewBox="0 0 18 18" fill="none"><path d="M9 4V14M4 9H14" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+      <div class="faq-a">Você tem 7 dias de garantia. Se não rolar, devolvemos 100% do valor sem perguntar nada.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Como funciona o suporte?
+        <svg class="faq-icon" viewBox="0 0 18 18" fill="none"><path d="M9 4V14M4 9H14" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+      <div class="faq-a">Discord ativo todos os dias. A gente, mentores e a turma toda. Dúvida sua é dúvida de mais 10 pessoas, então sempre tem resposta.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta container" id="cta">
+  <h2>Bora?<br/><span style="font-weight:300;color:var(--muted-2)">Clica aí.</span></h2>
+  <p>Se você chegou até aqui é porque tá interessado. Faz o cadastro e a gente se vê do outro lado.</p>
+  <a href="https://pay.kiwify.com.br/DOKxCPm" target="_blank" rel="noopener" class="btn btn-primary btn-lg">Quero entrar pra XIO</a>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo">XIO Technologies</div>
+        <p>Programar do zero, com IA. De Belém pro mundo.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Curso</h5>
+        <ul>
+          <li><a href="#metodo">Método</a></li>
+          <li><a href="#preco">Preço</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Sobre</h5>
+        <ul>
+          <li><a href="#fundadores">Fundadores</a></li>
+          <li><a href="https://instagram.com/iurimoreiral" target="_blank" rel="noopener">Instagram</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="#">Termos</a></li>
+          <li><a href="#">Privacidade</a></li>
+          <li><a href="mailto:contato@xio.com.br">contato@xio.com.br</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 XIO Technologies · Pará, Brasil</div>
+      <div>Feito com Claude + VS Code</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function toggleFaq(btn) {
+    const item = btn.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+</script>
+
 </body>
 </html>
